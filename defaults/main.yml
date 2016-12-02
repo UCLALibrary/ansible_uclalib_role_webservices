@@ -1,0 +1,9 @@
+---
+
+sftp_server_name: travisci-sftp.library.ucla.edu
+
+sftp_username: travisci
+
+sftp_path: /build
+
+ansible_ident_file: /home/ansible/.ssh/id_rsa

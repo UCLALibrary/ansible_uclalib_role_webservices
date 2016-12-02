@@ -1,0 +1,12 @@
+---
+
+- name: Determine if this is a new install of webapp_name
+  stat: path=/usr/local/{{ webapp_name }}
+  register: webapp_path
+
+- name: Back-up webapp if it already exists
+  include: backup_webapp.yml
+  when: webapp_path.stat.exists == True
+
+- name: Install the webapp
+  include: install_webapp.yml

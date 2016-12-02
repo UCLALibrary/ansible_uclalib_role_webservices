@@ -1,0 +1,22 @@
+---
+
+- name: Stop Tomcat Instance
+  service: name={{ webapp_name }} state=stopped
+
+- name: Find any previously backed-up .war files
+  find: file_type=file paths="/usr/local/{{ webapp_name }}/webapps" patterns="{{ webapp_name }}.war_*"
+  register: war_file_backups
+
+- name: Remove any previous .war file back-ups that were found
+  file: path="{{ item.path }}" state=absent
+  with_items: "{{ war_file_backups.files }}"
+  when: war_file_backups is defined
+
+- name: Back-up existing .war file
+  shell: >
+    mv /usr/local/{{ webapp_name }}/webapps/{{ webapp_name }}.war
+    /usr/local/{{ webapp_name }}/webapps/{{ webapp_name }}.war_`date +%Y%m%d%H%M%S`
+    removes=/usr/local/{{ webapp_name }}/webapps/{{ webapp_name }}.war
+
+- name: Remove webapp deployment folder
+  file: path=/usr/local/{{ webapp_name }}/webapps/{{ webapp_name }} state=absent
