@@ -1,8 +1,8 @@
 ---
 
-sftp_server_name: travisci-sftp.library.ucla.edu
+sftp_server_name: appdeploy-sftp.library.ucla.edu
 
-sftp_username: travisci
+sftp_username: appdeploy
 
 sftp_path: /build
 
