@@ -10,7 +10,10 @@
     executable: /bin/bash
   register: sftp_status
   ignore_errors: yes
-  notify: "tomcat deploy failed"
+
+- name: Handle any SFTP download failures
+  include: handle_failure.yml
+  when: sftp_status.rc != 0
 
 - name: Set ownership on build artifact
   file:

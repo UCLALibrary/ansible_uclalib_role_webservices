@@ -5,11 +5,7 @@
     name: "{{ webapp_name }}"
     enabled: "yes"
     state: "started"
-  when: sftp_status.rc != 0
-  listen: "tomcat deploy failed"
 
 - name: fail tomcat deployment
   fail:
     msg: "SFTP Download Failed"
-  when: sftp_status.rc != 0
-  listen: "tomcat deploy failed"
