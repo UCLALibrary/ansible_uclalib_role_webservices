@@ -1,6 +1,6 @@
 ---
 
-- name: Copy build artifact from sftp_server_name to project_target_path
+- name: Download build artifact from sftp_server_name to webapp_name path
   shell: >
     (
     echo "get {{ webapp_name }}/{{ webapp_name }}.war /usr/local/{{ webapp_name }}/webapps/{{ webapp_name }}.war" ;
@@ -9,10 +9,21 @@
   args:
     executable: /bin/bash
   register: sftp_status
-  failed_when: "sftp_status.rc != 0"
+  ignore_errors: yes
+
+- name: Handle any SFTP download failures
+  include: handle_failure.yml
+  static: no
+  when: sftp_status.rc != 0
 
 - name: Set ownership on build artifact
-  file: path=/usr/local/{{ webapp_name }}/webapps/{{ webapp_name }}.war owner={{ webapp_name }} group={{ webapp_name }}
+  file:
+    path: "/usr/local/{{ webapp_name }}/webapps/{{ webapp_name }}.war"
+    owner: "{{ webapp_name }}"
+    group: "{{ webapp_name }}"
 
 - name: Start Tomcat Instance
-  service: name={{ webapp_name }} enabled=yes state=started
+  service:
+    name: "{{ webapp_name }}"
+    enabled: "yes"
+    state: "started"

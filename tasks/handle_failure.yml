@@ -1,0 +1,11 @@
+---
+
+- name: start tomcat instance
+  service:
+    name: "{{ webapp_name }}"
+    enabled: "yes"
+    state: "started"
+
+- name: fail tomcat deployment
+  fail:
+    msg: "SFTP Download Failed"
