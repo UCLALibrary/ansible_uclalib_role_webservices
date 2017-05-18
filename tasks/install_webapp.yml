@@ -13,6 +13,7 @@
 
 - name: Handle any SFTP download failures
   include: handle_failure.yml
+  static: no
   when: sftp_status.rc != 0
 
 - name: Set ownership on build artifact
