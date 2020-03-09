@@ -12,8 +12,7 @@
   ignore_errors: yes
 
 - name: Handle any SFTP download failures
-  include: handle_failure.yml
-  static: no
+  include_tasks: handle_failure.yml
   when: sftp_status.rc != 0
 
 - name: Set ownership on build artifact
